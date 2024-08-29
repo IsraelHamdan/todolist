@@ -20,6 +20,7 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
+  //esta porcaria não está funcionando
   async create(user: Partial<User>): Promise<User> {
     if (user.senha) {
       const salt = await bcrypt.genSalt(10);
