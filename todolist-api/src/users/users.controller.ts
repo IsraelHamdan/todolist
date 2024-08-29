@@ -28,6 +28,9 @@ export class UsersController {
 
   @Post('register')
   async create(@Body() userDto: UserDTO): Promise<User> {
+    console.log(
+      `Dados recebidos no controller:${JSON.stringify(userDto, null, 2)}`,
+    );
     return this.userService.create(userDto);
   }
 

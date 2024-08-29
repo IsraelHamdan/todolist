@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import * as bcrypt from 'bcrypt';
+import { UserDTO } from './user_dto';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +21,6 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
-  //esta porcaria não está funcionando
   async create(user: Partial<User>): Promise<User> {
     if (user.senha) {
       const salt = await bcrypt.genSalt(10);
@@ -29,7 +29,6 @@ export class UsersService {
         ...user,
         senha: hashedPassword,
       });
-      newUser.senha = await bcrypt.hash(user.senha, 10);
       return this.userRepository.save(newUser);
     } else {
       throw new Error('Senha não fornecida');
