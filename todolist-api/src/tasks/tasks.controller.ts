@@ -7,9 +7,12 @@ import {
   Param,
   Put,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './task.entity';
+import { TaskDTO } from './TasksDTO.interface';
+import { CustomRequest } from '../interfaces/Request.interface';
 
 @Controller('tasks')
 export class TasksController {
@@ -26,8 +29,12 @@ export class TasksController {
   }
 
   @Post()
-  async create(@Body() task: Task): Promise<Task> {
-    return this.create(task);
+  async create(
+    @Body() taskDTO: TaskDTO,
+    @Req() req: CustomRequest,
+  ): Promise<Task> {
+    const user = req.user.id;
+    return this.taskServive.create(taskDTO, user);
   }
 
   @Put(':id')

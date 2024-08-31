@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -18,7 +19,7 @@ export class AuthService {
       userToValidate &&
       (await bcrypt.compare(password, userToValidate.senha))
     ) {
-      const { ...result } = userToValidate;
+      const { senha, email, id, ...result } = userToValidate;
       return result;
     } else {
       throw new UnauthorizedException('Dados invalidos');
@@ -28,6 +29,8 @@ export class AuthService {
   async login(user: any): Promise<{ access_token: string }> {
     const payload: jwtPayload = {
       sub: user.id,
+      nome: user.nome,
+      email: user.email,
       iat: Math.floor(Date.now() / 1000),
     };
     const token = this.jwtService.sign(payload, { expiresIn: '12h' });
